@@ -37,7 +37,7 @@ public class Restaurant {
     @JsonIgnore
     private List<Integer> ratings;
 
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     protected List<Review> reviews;
 
     @Column(name = "average_price")

@@ -14,4 +14,6 @@ public interface ReviewService {
 
     List<Review> findAllReviewsByUser(Integer Uid);
     Review likeReview(Review review, User user);
+
+    Review unLikeReview(Review review, User user);
 }

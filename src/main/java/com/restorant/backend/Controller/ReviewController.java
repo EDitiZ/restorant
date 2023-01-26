@@ -77,4 +77,17 @@ public class ReviewController {
         }
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
+
+    @PutMapping("/{id}/unlike/{Uid}")
+    public ResponseEntity<Review> unLikeReview(@PathVariable Integer id, @PathVariable Integer Uid){
+
+        Review review = reviewService.findById(id).orElseThrow();
+        User user = userService.findById(Uid).orElseThrow();
+
+        Review unLiked = reviewService.unLikeReview(review,user);
+        if (unLiked!=null)
+            return new ResponseEntity<>(unLiked, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
 }

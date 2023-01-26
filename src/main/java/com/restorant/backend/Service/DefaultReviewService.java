@@ -46,5 +46,15 @@ public class DefaultReviewService implements ReviewService{
         return review;
     }
 
+    public Review unLikeReview(Review review, User user){
+        if (review.getLikedBy().contains(user)){
+            review.getLikedBy().remove(user);
+            int like = review.getLikes();
+            review.setLikes(like-1);
+            reviewRepository.save(review);
+        }
+        return null;
+    }
+
 
 }
