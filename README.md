@@ -42,10 +42,10 @@ In this README, we will cover the steps to set up and run the application, as we
     
  ## Depenedencies 
     
-      Spring Boot 2.7.7
+      Spring Boot 2.7.8
       SpringWeb
-      MySQL Connector
-      Hibernate
+      MySQL Driver
+      Spring Data JPA
     
     
  ## Database  
@@ -58,15 +58,11 @@ In this README, we will cover the steps to set up and run the application, as we
     
  ## Endpoints
     
-  The following are the available REST endpoints for this project:
+  The following are the available REST endpoints for the _Restaurant_ Endpoints:
   
-  Creates a new restaurant
   
-    'POST /restaurant/post'
-    
-   _Returns a list of all restaurants_
-   
-    'GET /restaurant/post' 
+    'POST /restaurant/post' : Creates a new restaurant 
+    'GET /restaurant/post' : Returns a list of all restaurants 
     'GET /restaurant/post/one/{id}' : Returns a specific restaurant by ID
     'GET /restaurant/city/{address}' : Returns a list of all restaurants in a specific City
     'GET /restaurant/type/{type}' : Returns a list of all restaurants by a specific restaurant type
@@ -77,11 +73,28 @@ In this README, we will cover the steps to set up and run the application, as we
     'PUT /restaurant/update/{id}' : Updates an existing restaurant
     'DELETE /restaurant/delete/{id} : Deletes an existing restaurant
     
-  //Users Endpoints
+    
+  The following are the available REST endpoints for the _Users_ Endpoints:
   
-  //Reviews Endpoints
+    'POST /users/post : Creates a new user
+    'GET /users/city/{address} : Returns a list of all users in a specific city
+    'PUT /users/update/{uid} : Updates an existing user
+    'DELETE /users/delete/{uid} : Deletes an existing user
   
-  //Menu Endpoints
+  The following are the available REST endpoints for the _Reviews_ Endpoints:
+  
+    'POST /reviews/post' : Creates a new reviews
+    'GET /reviews/post/{rid}' : Returns a list of reviews of a specific restaurant
+    'GET /reviews/post/user/{uid}' : Returns a list of reviews by a specific user
+    'PUT /reviews/{id}/like/{uid}' : Likes a review from a specific user
+    'PUT /reviews/{id}/unlike/{uid} : Unlikes a reviews from a specific user
+  
+  The following are the available REST endpoints for the _Menu_ Endpoints:
+    
+    'POST /menu/add/{rid}' : Creates a menu item to a specific restaurant
+    'PUT /menu/update/{rid}/{id}' : Updates an existing menu item in a specific restaurant
+    'DELETE /menu/delete{rid}/{id}' : Deletes an existing menu item form a specific restaurant
+    
     
  ## Examples
     
