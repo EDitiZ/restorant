@@ -2,6 +2,7 @@ package com.restorant.backend.Controller;
 
 import com.restorant.backend.POJO.Address;
 import com.restorant.backend.POJO.User;
+import com.restorant.backend.POJO.UserNotFoundException;
 import com.restorant.backend.PojoInput.UserInput;
 import com.restorant.backend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,23 +46,30 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{uid}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer uid){
-        userService.deleteUser(uid);
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer uid) {
+        User user = userService.findById(uid).orElseThrow(() ->
+                new UserNotFoundException(uid));
 
+        userService.deleteUser(uid);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{Uid}")
     public ResponseEntity<User> updateUser(@PathVariable Integer Uid, @RequestBody UserInput input){
-        User user = userService.findById(Uid).orElseThrow();
+            User user = userService.findById(Uid).orElseThrow(() -> new UserNotFoundException(Uid));
 
-        user.setFirstName(input.getFirstName());
-        user.setLastName(input.getLastName());
-        user.setAddress(input.getAddress());
-        user.setPhoneNo(input.getPhoneNo());
 
-        userService.updateUser(user);
+            user.setFirstName(input.getFirstName());
+            user.setLastName(input.getLastName());
+            user.setAddress(input.getAddress());
+            user.setPhoneNo(input.getPhoneNo());
 
-        return new ResponseEntity<>(user,HttpStatus.OK);
+            userService.updateUser(user);
+
+            return new ResponseEntity<>(user,HttpStatus.OK);
+
+        }
+
+
     }
-}
+

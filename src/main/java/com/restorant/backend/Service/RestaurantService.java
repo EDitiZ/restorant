@@ -2,6 +2,7 @@ package com.restorant.backend.Service;
 
 import com.restorant.backend.POJO.Address;
 import com.restorant.backend.POJO.Restaurant;
+import com.restorant.backend.POJO.RestaurantNotFoundException;
 import com.restorant.backend.POJO.RestaurantType;
 
 import java.util.List;

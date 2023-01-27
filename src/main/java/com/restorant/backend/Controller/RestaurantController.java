@@ -1,9 +1,6 @@
 package com.restorant.backend.Controller;
 
-import com.restorant.backend.POJO.Address;
-import com.restorant.backend.POJO.EntityNotFoundException;
-import com.restorant.backend.POJO.Restaurant;
-import com.restorant.backend.POJO.RestaurantType;
+import com.restorant.backend.POJO.*;
 import com.restorant.backend.PojoInput.RestaurantInput;
 import com.restorant.backend.Service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.InvalidClassException;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -47,16 +45,21 @@ public class RestaurantController {
     }
 
     @GetMapping("/post/one/{id}")
-    public ResponseEntity<Restaurant> findOneById(@PathVariable Integer id){
+    public ResponseEntity<Restaurant> findOneById(@PathVariable Integer id) throws RestaurantNotFoundException{
 
-        Restaurant restaurant = restaurantService.findById(id).orElseThrow();
+        Restaurant restaurant = restaurantService.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
 
         return new ResponseEntity<>(restaurant,HttpStatus.OK);
     }
 
     //Getting all the restaurant in a specified City
     @GetMapping("/city/{address}")
-    public ResponseEntity<List<Restaurant>> findAllByAddress(@PathVariable String address) {
+    public ResponseEntity<List<Restaurant>> findAllByAddress(@PathVariable String address) throws InvalidCityArgumentException{
+
+        if (!Arrays.stream(Address.values()).anyMatch(c -> c.name().equalsIgnoreCase(address))) {
+            throw new InvalidCityArgumentException("Invalid city: " + address);
+        }
+
         Address addressEnum = Address.valueOf(address.toUpperCase());
         List<Restaurant> restaurants = restaurantService.findByAddress(addressEnum);
 
@@ -65,7 +68,12 @@ public class RestaurantController {
 
     //Getting all restaurants of the same restuarnt type
     @GetMapping("/type/{type}")
-    public ResponseEntity<List<Restaurant>> findAllByType(@PathVariable String type) {
+    public ResponseEntity<List<Restaurant>> findAllByType(@PathVariable String type) throws InvalidRestaurantTypeException{
+
+        if (!Arrays.stream(RestaurantType.values()).anyMatch(c -> c.name().equalsIgnoreCase(type))) {
+            throw new InvalidRestaurantTypeException("Invalid Restaurant Type: " + type);
+        }
+
         RestaurantType restaurantType = RestaurantType.valueOf(type.toUpperCase());
         List<Restaurant> restaurants = restaurantService.findByType(restaurantType);
 
@@ -83,7 +91,8 @@ public class RestaurantController {
 
     //Deleting a restaurant by their id
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteRestaurant(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteRestaurant(@PathVariable Integer id) throws RestaurantNotFoundException{
+        restaurantService.findById(id).orElseThrow(()-> new RestaurantNotFoundException(id));
         restaurantService.deleteRestaurant(id);
 
         return ResponseEntity.noContent().build();
@@ -91,8 +100,9 @@ public class RestaurantController {
 
     //Updating an existing restaurant
     @PutMapping("/update/{id}")
-    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable Integer id, @RequestBody RestaurantInput input) {
-        Restaurant restaurant = restaurantService.findById(id).orElseThrow();
+    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable Integer id, @RequestBody RestaurantInput input)
+            throws RestaurantNotFoundException{
+        Restaurant restaurant = restaurantService.findById(id).orElseThrow(() -> new RestaurantNotFoundException(id));
 
         restaurant.setName(input.getName());
         restaurant.setAddress(input.getAddress());
@@ -106,7 +116,12 @@ public class RestaurantController {
 
     //Getting restaurants in one city and sorting them by price
     @GetMapping("/cityprice/{address}/{sorter}")
-    public ResponseEntity<List<Restaurant>> sortByPriceOnCity(@PathVariable String address, @PathVariable String sorter) {
+    public ResponseEntity<List<Restaurant>> sortByPriceOnCity(@PathVariable String address, @PathVariable String sorter)
+            throws InvalidCityArgumentException {
+
+        if (!Arrays.stream(Address.values()).anyMatch(c -> c.name().equalsIgnoreCase(address))) {
+            throw new InvalidCityArgumentException("Invalid city: " + address);
+        }
 
         Address addressEnum = Address.valueOf(address.toUpperCase());
         List<Restaurant> restaurant = restaurantService.findByAddress(addressEnum);
@@ -114,7 +129,7 @@ public class RestaurantController {
         if (restaurant.isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        if (sorter.contains("asc"))
+        if (sorter.equals("asc"))
             restaurant.sort(Comparator.comparing(Restaurant::getAveragePrice));
         else
             restaurant.sort(Comparator.comparing(Restaurant::getAveragePrice).reversed());
