@@ -1,6 +1,7 @@
 package com.restorant.backend.Controller;
 
 import com.restorant.backend.POJO.Address;
+import com.restorant.backend.POJO.InvalidCityArgumentException;
 import com.restorant.backend.POJO.User;
 import com.restorant.backend.POJO.UserNotFoundException;
 import com.restorant.backend.PojoInput.UserInput;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -35,7 +37,12 @@ public class UserController {
     }
 
     @GetMapping("/city/{address}")
-    public ResponseEntity<List<User>> findAllByAddress(@PathVariable String address){
+    public ResponseEntity<List<User>> findAllByAddress(@PathVariable String address) throws InvalidCityArgumentException {
+
+        if (!Arrays.stream(Address.values()).anyMatch(c -> c.name().equalsIgnoreCase(address))) {
+            throw new InvalidCityArgumentException("Invalid city: " + address);
+        }
+
         Address addressEnum = Address.valueOf(address.toUpperCase());
         List<User> users = userService.findByAddress(addressEnum);
 

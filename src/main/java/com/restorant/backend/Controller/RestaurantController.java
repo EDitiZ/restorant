@@ -139,7 +139,12 @@ public class RestaurantController {
 
     //Getting restaurants on a city and sorting them by rating
     @GetMapping("/cityrating/{address}/{sorter}")
-    public ResponseEntity<List<Restaurant>> sortByRatingOnCity(@PathVariable String address, @PathVariable String sorter) {
+    public ResponseEntity<List<Restaurant>> sortByRatingOnCity(@PathVariable String address, @PathVariable String sorter)
+                                            throws InvalidCityArgumentException{
+
+        if (!Arrays.stream(Address.values()).anyMatch(c -> c.name().equalsIgnoreCase(address))) {
+            throw new InvalidCityArgumentException("Invalid city: " + address);
+        }
 
         Address addressEnum = Address.valueOf(address.toUpperCase());
         List<Restaurant> restaurant = restaurantService.findByAddress(addressEnum);
@@ -156,7 +161,13 @@ public class RestaurantController {
     }
 
     @GetMapping("/deliveries/{address}")
-    public ResponseEntity<List<Restaurant>> findByAddressAndDelivery(@PathVariable String address, @RequestParam boolean doDelivery){
+    public ResponseEntity<List<Restaurant>> findByAddressAndDelivery(@PathVariable String address, @RequestParam boolean doDelivery)
+                                            throws InvalidCityArgumentException{
+
+        if (!Arrays.stream(Address.values()).anyMatch(c -> c.name().equalsIgnoreCase(address))) {
+            throw new InvalidCityArgumentException("Invalid city: " + address);
+        }
+
         Address address1 = Address.valueOf(address.toUpperCase());
         List<Restaurant> deliveries = restaurantService.findByCityAndDoDelivery(address1,doDelivery);
 

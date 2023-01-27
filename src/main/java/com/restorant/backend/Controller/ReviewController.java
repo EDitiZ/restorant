@@ -1,8 +1,6 @@
 package com.restorant.backend.Controller;
 
-import com.restorant.backend.POJO.Restaurant;
-import com.restorant.backend.POJO.Review;
-import com.restorant.backend.POJO.User;
+import com.restorant.backend.POJO.*;
 import com.restorant.backend.PojoInput.ReviewInput;
 import com.restorant.backend.Service.RestaurantService;
 import com.restorant.backend.Service.ReviewService;
@@ -28,15 +26,15 @@ public class ReviewController {
 
 
     @PostMapping("/post")
-    public ResponseEntity<Review> create(@RequestBody ReviewInput input){
+    public ResponseEntity<Review> create(@RequestBody ReviewInput input) throws RestaurantNotFoundException, UserNotFoundException {
 
         int rating = input.getRating();;
         String text = input.getText();
         Integer Uid = input.getUid();
         Integer Rid = input.getRid();
 
-        Restaurant restaurant = restaurantService.findById(Rid).orElseThrow();
-        User user = userService.findById(Uid).orElseThrow();
+        Restaurant restaurant = restaurantService.findById(Rid).orElseThrow(() -> new RestaurantNotFoundException(Rid));
+        User user = userService.findById(Uid).orElseThrow(() -> new UserNotFoundException(Uid));
 
         Review review = new Review(rating, text, user, restaurant);
         restaurant.addRating(review.getRating());
@@ -47,7 +45,7 @@ public class ReviewController {
     }
 
     @GetMapping("/post/{rid}")
-    public ResponseEntity<List<Review>> findByRestaurant(@PathVariable Integer rid){
+    public ResponseEntity<List<Review>> findByRestaurant(@PathVariable Integer rid) {
         List<Review> reviews = reviewService.findAllReviewsByRestaurant(rid);
 
         if (!reviews.isEmpty())
@@ -67,10 +65,11 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}/like/{uid}")
-    public ResponseEntity<Review> likeReview(@PathVariable Integer id, @PathVariable Integer uid){
+    public ResponseEntity<Review> likeReview(@PathVariable Integer id, @PathVariable Integer uid)
+                                  throws ReviewNotFoundException, UserNotFoundException{
 
-        Review review = reviewService.findById(id).orElseThrow();
-        User user = userService. findById(uid).orElseThrow();
+        Review review = reviewService.findById(id).orElseThrow(() -> new ReviewNotFoundException(id));
+        User user = userService. findById(uid).orElseThrow(() -> new UserNotFoundException(uid));
         Review liked = reviewService.likeReview(review,user);
         if (liked!=null){
             return new ResponseEntity<>(liked,HttpStatus.OK);
@@ -79,10 +78,11 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}/unlike/{Uid}")
-    public ResponseEntity<Review> unLikeReview(@PathVariable Integer id, @PathVariable Integer Uid){
+    public ResponseEntity<Review> unLikeReview(@PathVariable Integer id, @PathVariable Integer Uid)
+                                   throws ReviewNotFoundException, UserNotFoundException{
 
-        Review review = reviewService.findById(id).orElseThrow();
-        User user = userService.findById(Uid).orElseThrow();
+        Review review = reviewService.findById(id).orElseThrow(() -> new ReviewNotFoundException(id));
+        User user = userService.findById(Uid).orElseThrow(() -> new UserNotFoundException(Uid));
 
         Review unLiked = reviewService.unLikeReview(review,user);
         if (unLiked!=null)

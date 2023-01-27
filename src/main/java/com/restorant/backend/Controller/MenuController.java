@@ -2,6 +2,7 @@ package com.restorant.backend.Controller;
 
 import com.restorant.backend.POJO.Menu;
 import com.restorant.backend.POJO.Restaurant;
+import com.restorant.backend.POJO.RestaurantNotFoundException;
 import com.restorant.backend.PojoInput.MenuInput;
 import com.restorant.backend.Service.MenuService;
 import com.restorant.backend.Service.RestaurantService;
@@ -25,9 +26,10 @@ public class MenuController {
 
 
     @PostMapping("/add/{Rid}")
-    public ResponseEntity<Menu> create(@PathVariable Integer Rid, @RequestBody MenuInput input) {
+    public ResponseEntity<Menu> create(@PathVariable Integer Rid, @RequestBody MenuInput input)
+                                throws RestaurantNotFoundException {
 
-        Restaurant restaurant = restaurantService.findById(Rid).orElseThrow();
+        Restaurant restaurant = restaurantService.findById(Rid).orElseThrow(() -> new RestaurantNotFoundException(Rid));
 
         String name = input.getName();
         double price = input.getPrice();
@@ -42,10 +44,10 @@ public class MenuController {
     }
 
     @DeleteMapping("/delete/{rid}/{mid}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Integer rid,
-                                           @PathVariable Integer mid) {
+    public ResponseEntity<Void> deleteItem(@PathVariable Integer rid, @PathVariable Integer mid)
+                                throws RestaurantNotFoundException{
 
-        Restaurant restaurant = restaurantService.findById(rid).orElseThrow();
+        Restaurant restaurant = restaurantService.findById(rid).orElseThrow(() -> new RestaurantNotFoundException(rid));
         List<Menu> menus = restaurant.getMenus();
 
         for (Menu menu : menus) {
@@ -60,9 +62,9 @@ public class MenuController {
 
     @PutMapping("/update/{Rid}/{id}")
     public ResponseEntity<Menu> updateMenu(@PathVariable Integer id, @PathVariable Integer Rid,
-                                           @RequestBody MenuInput input) {
+                                           @RequestBody MenuInput input) throws RestaurantNotFoundException{
 
-        Restaurant restaurant = restaurantService.findById(Rid).orElseThrow();
+        Restaurant restaurant = restaurantService.findById(Rid).orElseThrow(() -> new RestaurantNotFoundException(Rid));
         List<Menu> menus = restaurant.getMenus();
 
         for (Menu menu : menus) {
