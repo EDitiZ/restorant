@@ -11,6 +11,11 @@ Libraries and Frameworks used:
 
 In this README, we will cover the steps to set up and run the application, as well as provide information on the REST endpoints and usage examples.
 
+## UML Class Diagram
+
+![UML Class Diagram](https://user-images.githubusercontent.com/113714822/215280227-07f20a04-9cf0-461c-8ee3-d7f3b8d9f555.png)
+
+
 
 
 ## Setting up the project
