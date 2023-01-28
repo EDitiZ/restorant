@@ -4,6 +4,11 @@ Welcome to the Restaurant Review App! This app allows users to search for restau
 and ratings, and leave their own reviews. Users can also filter restaurants by their average price range, rating, and delivery availability. The app 
 is built using Spring Boot and utilizes a MySQL database to store all information. 
 
+Libraries and Frameworks used:
+- Spring Boot: used as the main framework for building the back-end of the application.
+- Hibernate: used as the ORM tool for mapping the entities to the database.
+- JUnit: used for unit testing
+
 In this README, we will cover the steps to set up and run the application, as well as provide information on the REST endpoints and usage examples.
 
 
