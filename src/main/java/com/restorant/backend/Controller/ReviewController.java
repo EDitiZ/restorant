@@ -26,7 +26,7 @@ public class ReviewController {
 
 
     @PostMapping("/post")
-    public ResponseEntity<Review> create(@RequestBody ReviewInput input) throws RestaurantNotFoundException, UserNotFoundException {
+    public ResponseEntity<Review> create(@RequestBody ReviewInput input) throws RestaurantNotFoundException, UserNotFoundException, InvalidRatingException {
 
         int rating = input.getRating();;
         String text = input.getText();
@@ -37,6 +37,7 @@ public class ReviewController {
         User user = userService.findById(Uid).orElseThrow(() -> new UserNotFoundException(Uid));
 
         Review review = new Review(rating, text, user, restaurant);
+        review.setRating(rating);
         restaurant.addRating(review.getRating());
         reviewService.create(review);
 

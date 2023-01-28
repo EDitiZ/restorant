@@ -60,7 +60,9 @@ public class Review {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(int rating) throws InvalidRatingException {
+        if (rating < 1 || rating > 5)
+            throw new InvalidRatingException("Rating must be between 1 and 5!");
         this.rating = rating;
     }
 
