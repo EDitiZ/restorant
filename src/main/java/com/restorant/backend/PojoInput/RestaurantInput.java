@@ -10,17 +10,16 @@ public class RestaurantInput {
     private RestaurantType type;
     private boolean doDelivery;
 
-//    public RestaurantInput(String name, Address address, RestaurantType type) {
-//        this.name = name;
-//        this.address = address;
-//        this.type = type;
-//    }
+    private double latitude;
+    private double longitude;
 
-    public RestaurantInput(String name, Address address, RestaurantType type,boolean doDelivery) {
+    public RestaurantInput(String name, Address address, RestaurantType type,boolean doDelivery, double latitude, double longitude) {
         this.name = name;
         this.address = address;
         this.type = type;
         this.doDelivery = doDelivery;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getName() {
@@ -53,5 +52,21 @@ public class RestaurantInput {
 
     public void setDoDelivery(boolean doDelivery) {
         this.doDelivery = doDelivery;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

@@ -48,24 +48,32 @@ public class Restaurant {
     @JsonIgnore
     private List<Double> prices;
 
+    private double longitude;
+    private double latitude;
+
+    @Transient
+    private double distance;
 
 
 
     public Restaurant() {
     }
 
-    public Restaurant(String name, Address address, RestaurantType type, boolean doDelivery) {
+    public Restaurant(String name, Address address, RestaurantType type, boolean doDelivery, double latitude, double longitude) {
         this.name = name;
         this.address = address;
         this.type = type;
         this.rating = 0;
         this.averagePrice = 0;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.ratings = new ArrayList<>();
         this.reviews = new ArrayList<>();
         this.menus = new ArrayList<>();
         this.prices = new ArrayList<>();
         this.priceRange = PriceRange.UNKNOWN;
         this.doDelivery = doDelivery;
+        this.distance = 0.0;
     }
 
     public Integer getId() {
@@ -164,6 +172,31 @@ public class Restaurant {
         this.doDelivery = doDelivery;
     }
 
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        distance = Math.round(distance * 100) / 100.0;
+        this.distance = distance;
+    }
+
     public void addRating(int rating){
         this.ratings.add(rating);
         totalRating();
@@ -213,6 +246,28 @@ public class Restaurant {
             setPriceRange(PriceRange.MODERATE);
         }
         else setPriceRange(PriceRange.EXPENSIVE);
+    }
+
+    public static double distance(double latitude, double longitude, double latitude2, double longitude2){
+
+        double theta = longitude - longitude2;
+
+        double dist = Math.sin(deg2rad(latitude)) * Math.sin(deg2rad(latitude2)) +
+                Math.cos(deg2rad(latitude)) * Math.cos(deg2rad(latitude2)) * Math.cos(deg2rad(theta));
+
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 *1.1515;
+        dist = dist * 1609.34;
+        return (dist);
+    }
+
+    private static double deg2rad(double degree){
+        return (degree * Math.PI / 180.0);
+    }
+
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
     }
 
 

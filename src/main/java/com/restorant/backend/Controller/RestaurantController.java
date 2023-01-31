@@ -9,10 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.transform.OutputKeys;
 import java.io.InvalidClassException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+
 
 @Controller
 @RequestMapping("/restaurant")
@@ -30,8 +33,10 @@ public class RestaurantController {
         Address address = input.getAddress();
         RestaurantType type = input.getType();
         boolean doDelivery = input.isDoDelivery();
+        double latitude = input.getLatitude();;
+        double longitude = input.getLongitude();
 
-        Restaurant restaurant = new Restaurant(name, address, type, doDelivery);
+        Restaurant restaurant = new Restaurant(name, address, type, doDelivery,latitude,longitude);
         restaurantService.create(restaurant);
         return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
 
@@ -173,4 +178,24 @@ public class RestaurantController {
 
         return new ResponseEntity<>(deliveries,HttpStatus.OK);
     }
+
+
+    @GetMapping("/nearme")
+    public ResponseEntity<List<Restaurant>> findAllRestaurantsNearBy(@RequestParam double longitude,
+                                                                     @RequestParam double latitude){
+
+        List<Restaurant> restaurants = restaurantService.findAll();
+
+        for (Restaurant restaurant: restaurants){
+            restaurant.setDistance(Restaurant.distance(restaurant.getLatitude(), restaurant.getLongitude(), latitude, longitude));
+        }
+        restaurants.sort(Comparator.comparingDouble(Restaurant::getDistance));
+
+        return new ResponseEntity(restaurants, HttpStatus.OK);
+
+    }
+
+
+
+
 }
