@@ -40,7 +40,7 @@ public class MenuController {
         menuService.create(menu);
 
 
-        return new ResponseEntity<>(menu, HttpStatus.OK);
+        return new ResponseEntity<>(menu, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{rid}/{mid}")

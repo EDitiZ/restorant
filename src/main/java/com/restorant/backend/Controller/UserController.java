@@ -33,7 +33,7 @@ public class UserController {
         User user = new User(firstName,lastName,address,phoneNo);
         userService.create(user);
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @GetMapping("/city/{address}")

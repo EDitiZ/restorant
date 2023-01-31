@@ -42,7 +42,7 @@ public class ReviewController {
         reviewService.create(review);
 
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/post/{rid}")
