@@ -361,8 +361,45 @@ In this README, we will cover the steps to set up and run the application, as we
     DELETE /users/delete/3
     
     
+  ### GET /restaurant/nearme?latitude&longitude
+  
+  Returns a list of restaurants sorted based on distance from the user.
+  
+    Example request:
     
+    GET /restaurant/nearme?latitude=41.227525&longitude=20.721863
     
+    Example Response: 
+    
+    [
+	{
+		"id": 4,
+		"name": "Versus",
+		"address": "STRUGA",
+		"type": "CASUAL",
+		"rating": 0.0,
+		"priceRange": "UNKNOWN",
+		"doDelivery": true,
+		"menus": [],
+		"reviews": [],
+		"longitude": 20.6691,
+		"latitude": 41.1718,
+		"distance": 7607.62
+	},
+	{
+		"id": 5,
+		"name": "Aquarius",
+		"address": "STRUGA",
+		"type": "CASUAL",
+		"rating": 0.0,
+		"priceRange": "UNKNOWN",
+		"doDelivery": true,
+		"menus": [],
+		"reviews": [],
+		"longitude": 20.66807,
+		"latitude": 41.171533,
+		"distance": 7681.99
+	},
     
  ## Notes 
       
