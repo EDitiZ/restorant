@@ -1,6 +1,6 @@
 # Restaurant Finder
 
-Welcome to the Restaurant Review App! This app allows users to search for restaurants in their area, view restaurant information, including reviews 
+Welcome to a Restaurant Finder App! This app allows users to search for restaurants in their area, view restaurant information, including reviews 
 and ratings, and leave their own reviews. Users can also filter restaurants by their average price range, rating, and delivery availability. The app 
 is built using Spring Boot and utilizes a MySQL database to store all information. 
 
