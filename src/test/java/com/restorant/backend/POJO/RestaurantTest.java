@@ -5,14 +5,16 @@ import static org.junit.Assert.*;
 public class RestaurantTest {
 
     private final String NAME = "Versus";
-    private final Address address = Address.SKOPJE;
-    private final RestaurantType type = RestaurantType.MEDITERRANEAN;
-    private final boolean doDelivery = false;
+    private final Address ADDRESS = Address.SKOPJE;
+    private final RestaurantType TYPE = RestaurantType.MEDITERRANEAN;
+    private final boolean DODELIVERY = false;
+    private final double LATITUDE = 42.513;
+    private final double ALTITUDE = 21.13;
     Restaurant restaurant;
     @org.junit.Before
     public void setUp() {
 
-        restaurant = new Restaurant(NAME,address,type,doDelivery);
+        restaurant = new Restaurant(NAME,ADDRESS,TYPE,DODELIVERY,LATITUDE,ALTITUDE);
         restaurant.addRating(5);
         restaurant.addRating(3);
 

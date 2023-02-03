@@ -11,7 +11,7 @@ public class ReviewTest {
     @Before
     public void setUp() {
         User user = new User("Endrit","Ziba",Address.STRUGA,"070208639");
-        Restaurant restaurant = new Restaurant("Versus",Address.STRUGA,RestaurantType.MEDITERRANEAN,true);
+        Restaurant restaurant = new Restaurant("Versus",Address.STRUGA,RestaurantType.MEDITERRANEAN,true,40.163,20.12);
                 review = new Review(5,"Nice",user,restaurant);
 
                 review.incrementLikes();
